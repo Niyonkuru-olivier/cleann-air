@@ -40,7 +40,7 @@ export default function HowItWorksSection() {
       <div className="max-w-5xl mx-auto">
         <h2 className="text-3xl font-bold text-center mb-4 text-slate-900 dark:text-white">How It Works</h2>
         <p className="text-slate-500 dark:text-slate-400 text-center mb-12">
-          Fitted directly on the vehicle or machine — from exhaust pipe to clean air in seconds
+          Fitted directly on the vehicle or machine - from exhaust pipe to clean air in seconds
         </p>
         <div className="flex flex-col md:flex-row items-start justify-between gap-4">
           {steps.map((s, i) => (

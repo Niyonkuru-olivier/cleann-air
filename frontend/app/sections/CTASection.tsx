@@ -7,7 +7,7 @@ export default function CTASection() {
         <h2 className="text-3xl font-bold mb-4 text-slate-900 dark:text-white">Monitor Every Vehicle & Industry Unit</h2>
         <p className="text-slate-500 dark:text-slate-400 mb-8">
           Access the admin dashboard to track live CO readings across registered
-          cars, motorcycles, and small industries — with alerts, history, and device management.
+          cars, motorcycles, and small industries - with alerts, history, and device management.
         </p>
         <Link
           href="/dashboard"

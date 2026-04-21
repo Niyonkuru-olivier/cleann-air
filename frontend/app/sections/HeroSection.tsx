@@ -14,7 +14,7 @@ export default function HeroSection() {
 
       <p className="text-slate-500 dark:text-slate-400 text-lg md:text-xl max-w-2xl leading-relaxed">
         An IoT-based purification unit mounted directly on vehicles and small
-        industries — reducing carbon monoxide from exhaust pipes by up to 50%,
+        industries - reducing carbon monoxide from exhaust pipes by up to 50%,
         monitored in real time via ESP32.
       </p>
 
