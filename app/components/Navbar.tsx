@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { Wind, LayoutDashboard, Menu, X, Moon, Sun } from "lucide-react";
-import { useState, useEffect } from "react";
+import { Wind, LayoutDashboard, Menu, X } from "lucide-react";
+import { useState } from "react";
+import DarkModeToggle from "./DarkModeToggle";
 
 const navLinks = [
   { label: "Features", href: "#features" },
@@ -12,15 +13,6 @@ const navLinks = [
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [dark, setDark] = useState(() => {
-    if (typeof window === "undefined") return true;
-    return localStorage.getItem("theme") !== "light";
-  });
-
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", dark);
-    localStorage.setItem("theme", dark ? "dark" : "light");
-  }, [dark]);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-white/10">
@@ -52,14 +44,7 @@ export default function Navbar() {
 
         {/* Desktop CTA */}
         <div className="hidden md:flex items-center gap-3">
-          <button
-            type="button"
-            onClick={() => setDark((d) => !d)}
-            className="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-all"
-            aria-label="Toggle dark mode"
-          >
-            {dark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-          </button>
+          <DarkModeToggle />
           <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-3 py-1.5 rounded-full">
             <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
             Live
