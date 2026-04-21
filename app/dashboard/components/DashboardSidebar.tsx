@@ -8,14 +8,18 @@ import {
   History,
   BellRing,
   Settings,
+  Cpu,
+  Users,
   ArrowLeft,
 } from "lucide-react";
 
 const navItems = [
-  { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
-  { label: "History", href: "/dashboard/history", icon: History },
-  { label: "Alerts", href: "/dashboard/alerts", icon: BellRing },
-  { label: "Settings", href: "/dashboard/settings", icon: Settings },
+  { label: "Overview", href: "/dashboard",         icon: LayoutDashboard },
+  { label: "Devices",  href: "/dashboard/devices", icon: Cpu },
+  { label: "Users",    href: "/dashboard/users",   icon: Users },
+  { label: "History",  href: "/dashboard/history", icon: History },
+  { label: "Alerts",   href: "/dashboard/alerts",  icon: BellRing },
+  { label: "Settings", href: "/dashboard/settings",icon: Settings },
 ];
 
 export default function DashboardSidebar() {
