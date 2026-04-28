@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { User, Eye, EyeOff, Wind } from "lucide-react";
 
@@ -14,6 +15,7 @@ const STARS = Array.from({ length: 120 }, (_, i) => ({
 }));
 
 export default function LoginPage() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
 
@@ -93,7 +95,7 @@ export default function LoginPage() {
             <p className="text-white/50 text-xs mt-1">CleanAir Monitoring System</p>
           </div>
 
-          <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+          <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); router.push("/dashboard"); }}>
             {/* Username */}
             <div className="relative">
               <input

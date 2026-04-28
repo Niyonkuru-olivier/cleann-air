@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { User, Eye, EyeOff, Wind } from "lucide-react";
 import Modal from "./Modal";
@@ -20,6 +21,7 @@ interface LoginModalProps {
 }
 
 export default function LoginModal({ open, onClose }: LoginModalProps) {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
 
@@ -98,7 +100,7 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
             <p className="text-white/50 text-xs mt-1">CleanAir Monitoring System</p>
           </div>
 
-          <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+          <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); onClose(); router.push("/dashboard"); }}>
             {/* Username */}
             <div className="relative">
               <input
