@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Wind, LayoutDashboard, LogIn, Menu, X } from "lucide-react";
 import { useState } from "react";
 import DarkModeToggle from "./DarkModeToggle";
-import LoginModal from "./LoginModal";
 
 const navLinks = [
   { label: "Features", href: "#features" },
@@ -14,7 +13,6 @@ const navLinks = [
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [loginOpen, setLoginOpen] = useState(false);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-white/10">
@@ -109,8 +107,6 @@ export default function Navbar() {
           </Link>
         </div>
       )}
-
-      <LoginModal open={loginOpen} onClose={() => setLoginOpen(false)} />
     </header>
   );
 }
