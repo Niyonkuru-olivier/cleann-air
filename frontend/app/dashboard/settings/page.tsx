@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  Bell, Shield, Wifi, Database, User, Save, ChevronRight,
+  Bell, Shield, Wifi, Database, User, Save, ChevronRight, Eye, EyeOff,
 } from "lucide-react";
 import DarkModeToggle from "../../components/DarkModeToggle";
 
@@ -56,10 +56,40 @@ function Toggle({ enabled, onChange }: { enabled: boolean; onChange: () => void 
 
 export default function SettingsPage() {
   const [profile, setProfile] = useState({
-    name: "ISHIMWE KARANGWA Cyrille",
-    email: "ishimwekarangwa_222016817@stud.ur.ac.rw",
-    phone: "+250 788 000 000",
+    id: "",
+    name: "",
+    email: "",
+    phone: "",
+    password: "",
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [message, setMessage] = useState({ text: "", type: "" });
+
+  useEffect(() => {
+    const userJson = localStorage.getItem("user");
+    if (userJson) {
+      const user = JSON.parse(userJson);
+      fetch(`http://localhost:3001/api/admin/users/${user.id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setProfile({
+            id: data.id,
+            name: data.name,
+            email: data.email,
+            phone: data.phone || "",
+            password: "", // We don't fetch the password hash
+          });
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.error("Failed to fetch profile:", err);
+          setIsLoading(false);
+        });
+    }
+  }, []);
 
   const [thresholds, setThresholds] = useState({
     warning: "400", critical: "500", minReduction: "45", offlineMinutes: "5",
@@ -84,6 +114,52 @@ export default function SettingsPage() {
   const d = (field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
     setDataSettings((f) => ({ ...f, [field]: e.target.value }));
 
+  const handleSaveProfile = async () => {
+    setIsSaving(true);
+    setMessage({ text: "", type: "" });
+
+    try {
+      const body: any = {
+        name: profile.name,
+        email: profile.email,
+        phone: profile.phone,
+      };
+
+      if (profile.password) {
+        body.password = profile.password;
+      }
+
+      const res = await fetch(`http://localhost:3001/api/admin/users/${profile.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to update profile");
+      }
+
+      // Update local storage with new info
+      localStorage.setItem("user", JSON.stringify(data));
+      setMessage({ text: "Profile updated successfully!", type: "success" });
+      setProfile((prev) => ({ ...prev, password: "" })); // Clear password field
+    } catch (err: any) {
+      setMessage({ text: err.message, type: "error" });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8 max-w-3xl">
       {/* Header */}
@@ -97,25 +173,54 @@ export default function SettingsPage() {
         <DarkModeToggle />
       </div>
 
+      {/* Message */}
+      {message.text && (
+        <div className={`px-4 py-3 rounded-xl text-sm border ${
+          message.type === "success" 
+            ? "bg-green-500/10 border-green-500/50 text-green-500" 
+            : "bg-red-500/10 border-red-500/50 text-red-500"
+        }`}>
+          {message.text}
+        </div>
+      )}
+
       {/* Profile */}
       <Section icon={<User className="w-4 h-4 text-blue-500" />} title="Admin Profile" desc="Your account details">
         <Field label="Full Name">
-          <input className={inputClass} value={profile.name} onChange={p("name")} />
+          <input className={inputClass} value={profile.name} onChange={p("name")} placeholder="Your full name" />
         </Field>
         <Field label="Email Address">
-          <input type="email" className={inputClass} value={profile.email} onChange={p("email")} />
+          <input type="email" className={inputClass} value={profile.email} onChange={p("email")} placeholder="Email address" />
         </Field>
         <Field label="Phone Number" hint="Used for SMS alerts (optional)">
-          <input className={inputClass} value={profile.phone} onChange={p("phone")} />
+          <input className={inputClass} value={profile.phone} onChange={p("phone")} placeholder="+250 788 000 000" />
         </Field>
-        <Field label="Password" hint="Last changed 30 days ago">
-          <button type="button" className="w-full flex items-center justify-between px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all">
-            Change password <ChevronRight className="w-4 h-4" />
-          </button>
+        <Field label="Password" hint="Leave empty to keep current password">
+          <div className="relative">
+            <input 
+              type={showPassword ? "text" : "password"} 
+              className={inputClass} 
+              value={profile.password || ""} 
+              onChange={p("password")} 
+              placeholder="••••••••" 
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+            >
+              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
+          </div>
         </Field>
         <div className="flex justify-end pt-1">
-          <button type="button" className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors">
-            <Save className="w-4 h-4" /> Save Profile
+          <button 
+            type="button" 
+            onClick={handleSaveProfile}
+            disabled={isSaving}
+            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors"
+          >
+            {isSaving ? "Saving..." : <><Save className="w-4 h-4" /> Save Profile</>}
           </button>
         </div>
       </Section>

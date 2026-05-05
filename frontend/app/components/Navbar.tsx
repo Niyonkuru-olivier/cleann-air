@@ -51,14 +51,13 @@ export default function Navbar() {
             <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
             Live
           </div>
-          <button
-            type="button"
-            onClick={() => setLoginOpen(true)}
+          <Link
+            href="/login"
             className="flex items-center gap-2 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all hover:bg-slate-100 dark:hover:bg-white/5"
           >
             <LogIn className="w-4 h-4" />
             Login
-          </button>
+          </Link>
           <Link
             href="/dashboard"
             className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all shadow-lg shadow-blue-500/25"
@@ -92,14 +91,14 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
-          <button
-            type="button"
-            onClick={() => { setMenuOpen(false); setLoginOpen(true); }}
+          <Link
+            href="/login"
+            onClick={() => setMenuOpen(false)}
             className="flex items-center justify-center gap-2 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all mt-2"
           >
             <LogIn className="w-4 h-4" />
             Login
-          </button>
+          </Link>
           <Link
             href="/dashboard"
             onClick={() => setMenuOpen(false)}
