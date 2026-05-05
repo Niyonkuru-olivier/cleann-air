@@ -52,7 +52,7 @@ export default function AddUserPage() {
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-1.5">
             <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Role *</label>
-            <select className={inputClass} value={form.role} onChange={set("role")}>
+            <select aria-label="Role" className={inputClass} value={form.role} onChange={set("role")}>
               <option value="admin">Admin</option>
               <option value="operator">Operator</option>
               <option value="viewer">Viewer</option>
@@ -60,7 +60,7 @@ export default function AddUserPage() {
           </div>
           <div className="space-y-1.5">
             <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Status</label>
-            <select className={inputClass} value={form.status} onChange={set("status")}>
+            <select aria-label="Status" className={inputClass} value={form.status} onChange={set("status")}>
               <option value="active">Active</option>
               <option value="inactive">Inactive</option>
             </select>

@@ -98,7 +98,7 @@ export default function UsersPage() {
                       <Link href={`/dashboard/users/${user.id}/edit`} className="p-1.5 rounded-lg text-slate-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-all">
                         <Pencil className="w-4 h-4" />
                       </Link>
-                      <button type="button" className="p-1.5 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-all">
+                      <button type="button" aria-label="Delete user" title="Delete user" className="p-1.5 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-all">
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
