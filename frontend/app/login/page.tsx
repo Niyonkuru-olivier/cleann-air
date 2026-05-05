@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { User, Eye, EyeOff, Wind } from "lucide-react";
+import DarkModeToggle from "../components/DarkModeToggle";
 
 const rand = (seed: number) => { const x = Math.sin(seed + 1) * 10000; return x - Math.floor(x); };
 const STARS = Array.from({ length: 120 }, (_, i) => ({
@@ -22,11 +23,16 @@ export default function LoginPage() {
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
 
-      {/* Sky gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0d0022] via-[#2d0a6e] to-[#6b21a8]" />
+      {/* Dark mode toggle */}
+      <div className="absolute top-4 right-4 z-20">
+        <DarkModeToggle />
+      </div>
 
-      {/* Stars */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Background — light: soft lavender, dark: deep purple */}
+      <div className="absolute inset-0 bg-gradient-to-b from-violet-100 via-purple-50 to-indigo-100 dark:from-[#0d0022] dark:via-[#2d0a6e] dark:to-[#6b21a8] transition-colors duration-300" />
+
+      {/* Stars — dark mode only */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none hidden dark:block">
         {STARS.map((s, i) => (
           <span
             key={i}
@@ -42,7 +48,7 @@ export default function LoginPage() {
         ))}
       </div>
 
-      {/* Mountain silhouette (back) */}
+      {/* Mountain silhouette */}
       <svg
         className="absolute bottom-0 left-0 right-0 w-full"
         viewBox="0 0 1440 320"
@@ -51,12 +57,12 @@ export default function LoginPage() {
       >
         <path
           d="M0,320 L0,200 L120,100 L240,160 L380,60 L520,140 L660,40 L800,130 L940,50 L1080,140 L1200,80 L1320,150 L1440,90 L1440,320 Z"
-          fill="#1e0050"
+          className="fill-violet-200 dark:fill-[#1e0050]"
           opacity="0.9"
         />
         <path
           d="M0,320 L0,240 L80,180 L180,220 L300,150 L440,200 L560,130 L700,190 L820,120 L960,180 L1080,140 L1200,190 L1320,160 L1440,200 L1440,320 Z"
-          fill="#2d006b"
+          className="fill-purple-200 dark:fill-[#2d006b]"
           opacity="0.85"
         />
       </svg>
@@ -73,26 +79,26 @@ export default function LoginPage() {
           const w = 30 + (i % 3) * 10;
           return (
             <g key={x} transform={`translate(${x}, ${200 - h})`}>
-              <polygon points={`${w/2},0 ${w},${h*0.45} 0,${h*0.45}`} fill="#0f0033" opacity="0.95" />
-              <polygon points={`${w/2},${h*0.2} ${w*1.1},${h*0.65} ${-w*0.1},${h*0.65}`} fill="#0f0033" opacity="0.95" />
-              <polygon points={`${w/2},${h*0.4} ${w*1.2},${h*0.9} ${-w*0.2},${h*0.9}`} fill="#0f0033" opacity="0.95" />
-              <rect x={w/2 - 3} y={h*0.85} width="6" height={h*0.15} fill="#0f0033" opacity="0.95" />
+              <polygon points={`${w/2},0 ${w},${h*0.45} 0,${h*0.45}`}                        className="fill-violet-400 dark:fill-[#0f0033]" opacity="0.95" />
+              <polygon points={`${w/2},${h*0.2} ${w*1.1},${h*0.65} ${-w*0.1},${h*0.65}`}    className="fill-violet-400 dark:fill-[#0f0033]" opacity="0.95" />
+              <polygon points={`${w/2},${h*0.4} ${w*1.2},${h*0.9} ${-w*0.2},${h*0.9}`}      className="fill-violet-400 dark:fill-[#0f0033]" opacity="0.95" />
+              <rect x={w/2 - 3} y={h*0.85} width="6" height={h*0.15}                         className="fill-violet-400 dark:fill-[#0f0033]" opacity="0.95" />
             </g>
           );
         })}
       </svg>
 
-      {/* Glass card */}
+      {/* Card */}
       <div className="relative z-10 w-full max-w-sm mx-4">
-        <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-3xl p-8 shadow-2xl shadow-black/40">
+        <div className="backdrop-blur-xl bg-white/80 dark:bg-white/10 border border-white dark:border-white/20 rounded-3xl p-8 shadow-2xl shadow-purple-200/60 dark:shadow-black/40">
 
           {/* Logo */}
           <div className="flex flex-col items-center mb-8">
             <div className="bg-gradient-to-br from-violet-500 to-purple-700 p-3 rounded-2xl shadow-lg shadow-purple-500/30 mb-3">
               <Wind className="w-6 h-6 text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-white tracking-tight">Login</h1>
-            <p className="text-white/50 text-xs mt-1">CleanAir Monitoring System</p>
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Login</h1>
+            <p className="text-slate-400 dark:text-white/50 text-xs mt-1">CleanAir Monitoring System</p>
           </div>
 
           <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); router.push("/dashboard"); }}>
@@ -101,9 +107,9 @@ export default function LoginPage() {
               <input
                 type="text"
                 placeholder="Username"
-                className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 pr-10 text-white placeholder-white/40 text-sm focus:outline-none focus:border-violet-400 focus:bg-white/15 transition-all"
+                className="w-full bg-white/60 dark:bg-white/10 border border-slate-200 dark:border-white/20 rounded-xl px-4 py-3 pr-10 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/40 text-sm focus:outline-none focus:border-violet-400 transition-all"
               />
-              <User className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+              <User className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-white/40" />
             </div>
 
             {/* Password */}
@@ -111,12 +117,12 @@ export default function LoginPage() {
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
-                className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 pr-10 text-white placeholder-white/40 text-sm focus:outline-none focus:border-violet-400 focus:bg-white/15 transition-all"
+                className="w-full bg-white/60 dark:bg-white/10 border border-slate-200 dark:border-white/20 rounded-xl px-4 py-3 pr-10 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/40 text-sm focus:outline-none focus:border-violet-400 transition-all"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-white/40 hover:text-slate-600 dark:hover:text-white/70 transition-colors"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -124,7 +130,7 @@ export default function LoginPage() {
 
             {/* Remember + Forgot */}
             <div className="flex items-center justify-between text-xs">
-              <label className="flex items-center gap-2 text-white/60 cursor-pointer select-none">
+              <label className="flex items-center gap-2 text-slate-500 dark:text-white/60 cursor-pointer select-none">
                 <input
                   type="checkbox"
                   checked={remember}
@@ -133,7 +139,7 @@ export default function LoginPage() {
                 />
                 Remember Me
               </label>
-              <Link href="#" className="text-white/60 hover:text-white transition-colors">
+              <Link href="#" className="text-slate-500 dark:text-white/60 hover:text-violet-600 dark:hover:text-white transition-colors">
                 Forgot Password
               </Link>
             </div>
@@ -141,15 +147,15 @@ export default function LoginPage() {
             {/* Submit */}
             <button
               type="submit"
-              className="w-full bg-white hover:bg-white/90 text-purple-900 font-bold py-3 rounded-xl text-sm transition-all shadow-lg shadow-black/20 mt-2"
+              className="w-full bg-violet-600 hover:bg-violet-500 dark:bg-white dark:hover:bg-white/90 text-white dark:text-purple-900 font-bold py-3 rounded-xl text-sm transition-all shadow-lg shadow-violet-500/30 dark:shadow-black/20 mt-2"
             >
               Login
             </button>
           </form>
 
-          <p className="text-center text-white/50 text-xs mt-6">
+          <p className="text-center text-slate-400 dark:text-white/50 text-xs mt-6">
             Don&apos;t have an account?{" "}
-            <Link href="#" className="text-white font-semibold hover:text-violet-300 transition-colors">
+            <Link href="#" className="text-violet-600 dark:text-white font-semibold hover:text-violet-500 dark:hover:text-violet-300 transition-colors">
               Register
             </Link>
           </p>

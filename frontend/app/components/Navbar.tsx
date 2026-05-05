@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Wind, LayoutDashboard, LogIn, Menu, X } from "lucide-react";
 import { useState } from "react";
 import DarkModeToggle from "./DarkModeToggle";
-import LoginModal from "./LoginModal";
 
 const navLinks = [
   { label: "Features", href: "#features" },
@@ -14,7 +13,6 @@ const navLinks = [
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [loginOpen, setLoginOpen] = useState(false);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-white/10">
@@ -51,21 +49,20 @@ export default function Navbar() {
             <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
             Live
           </div>
-          <button
-            type="button"
-            onClick={() => setLoginOpen(true)}
+          <Link
+            href="/login"
             className="flex items-center gap-2 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all hover:bg-slate-100 dark:hover:bg-white/5"
           >
             <LogIn className="w-4 h-4" />
             Login
-          </button>
-          <Link
+          </Link>
+          {/* <Link
             href="/dashboard"
             className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all shadow-lg shadow-blue-500/25"
           >
             <LayoutDashboard className="w-4 h-4" />
             Dashboard
-          </Link>
+          </Link> */}
         </div>
 
         {/* Mobile Menu Button */}
@@ -92,14 +89,14 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
-          <button
-            type="button"
-            onClick={() => { setMenuOpen(false); setLoginOpen(true); }}
+          <Link
+            href="/login"
+            onClick={() => setMenuOpen(false)}
             className="flex items-center justify-center gap-2 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all mt-2"
           >
             <LogIn className="w-4 h-4" />
             Login
-          </button>
+          </Link>
           <Link
             href="/dashboard"
             onClick={() => setMenuOpen(false)}
@@ -110,8 +107,6 @@ export default function Navbar() {
           </Link>
         </div>
       )}
-
-      <LoginModal open={loginOpen} onClose={() => setLoginOpen(false)} />
     </header>
   );
 }
