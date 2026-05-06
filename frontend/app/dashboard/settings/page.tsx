@@ -45,11 +45,13 @@ function Toggle({ enabled, onChange }: { enabled: boolean; onChange: () => void 
   return (
     <button
       type="button"
+      role="switch"
+      aria-checked={enabled}
       onClick={onChange}
       aria-label="Toggle setting"
-      className={`relative w-10 h-6 rounded-full transition-colors ${enabled ? "bg-blue-500" : "bg-slate-200 dark:bg-slate-600"}`}
+      className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800 ${enabled ? "bg-blue-500" : "bg-slate-200 dark:bg-slate-600"}`}
     >
-      <span className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${enabled ? "translate-x-5" : "translate-x-1"}`} />
+      <span className={`inline-block h-4 w-4 rounded-full bg-white shadow-md transition-transform duration-200 ${enabled ? "translate-x-6" : "translate-x-1"}`} />
     </button>
   );
 }
@@ -100,13 +102,13 @@ export default function SettingsPage() {
       {/* Profile */}
       <Section icon={<User className="w-4 h-4 text-blue-500" />} title="Admin Profile" desc="Your account details">
         <Field label="Full Name">
-          <input className={inputClass} value={profile.name} onChange={p("name")} />
+          <input title="Full Name" className={inputClass} value={profile.name} onChange={p("name")} />
         </Field>
         <Field label="Email Address">
-          <input type="email" className={inputClass} value={profile.email} onChange={p("email")} />
+          <input type="email" title="Email Address" className={inputClass} value={profile.email} onChange={p("email")} />
         </Field>
         <Field label="Phone Number" hint="Used for SMS alerts (optional)">
-          <input className={inputClass} value={profile.phone} onChange={p("phone")} />
+          <input title="Phone Number" className={inputClass} value={profile.phone} onChange={p("phone")} />
         </Field>
         <Field label="Password" hint="Last changed 30 days ago">
           <button type="button" className="w-full flex items-center justify-between px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all">
@@ -124,25 +126,25 @@ export default function SettingsPage() {
       <Section icon={<Bell className="w-4 h-4 text-yellow-500" />} title="Alert Thresholds" desc="CO ppm levels that trigger warnings and critical alerts on vehicles and industries">
         <Field label="Warning Level" hint="CO input above this triggers a warning alert">
           <div className="flex items-center gap-2">
-            <input type="number" className={inputClass} value={thresholds.warning} onChange={t("warning")} />
+            <input type="number" title="Warning Level (ppm)" className={inputClass} value={thresholds.warning} onChange={t("warning")} />
             <span className="text-sm text-slate-400 shrink-0">ppm</span>
           </div>
         </Field>
         <Field label="Critical Level" hint="CO input above this triggers a critical alert">
           <div className="flex items-center gap-2">
-            <input type="number" className={inputClass} value={thresholds.critical} onChange={t("critical")} />
+            <input type="number" title="Critical Level (ppm)" className={inputClass} value={thresholds.critical} onChange={t("critical")} />
             <span className="text-sm text-slate-400 shrink-0">ppm</span>
           </div>
         </Field>
         <Field label="Min. Purification Rate" hint="Alert if reduction falls below this">
           <div className="flex items-center gap-2">
-            <input type="number" className={inputClass} value={thresholds.minReduction} onChange={t("minReduction")} />
+            <input type="number" title="Min. Purification Rate (%)" className={inputClass} value={thresholds.minReduction} onChange={t("minReduction")} />
             <span className="text-sm text-slate-400 shrink-0">%</span>
           </div>
         </Field>
         <Field label="Device Offline After" hint="Alert if no data received within">
           <div className="flex items-center gap-2">
-            <input type="number" className={inputClass} value={thresholds.offlineMinutes} onChange={t("offlineMinutes")} />
+            <input type="number" title="Device Offline After (minutes)" className={inputClass} value={thresholds.offlineMinutes} onChange={t("offlineMinutes")} />
             <span className="text-sm text-slate-400 shrink-0">min</span>
           </div>
         </Field>
@@ -211,11 +213,11 @@ export default function SettingsPage() {
       {/* API */}
       <Section icon={<Database className="w-4 h-4 text-purple-500" />} title="API & Integration" desc="Backend endpoint and authentication key for ESP32 devices">
         <Field label="API Endpoint">
-          <input className={inputClass} value={api.endpoint} onChange={(e) => setApi((a) => ({ ...a, endpoint: e.target.value }))} />
+          <input title="API Endpoint" className={inputClass} value={api.endpoint} onChange={(e) => setApi((a) => ({ ...a, endpoint: e.target.value }))} />
         </Field>
         <Field label="API Key" hint="Used by ESP32 devices to authenticate">
           <div className="flex items-center gap-2">
-            <input className={inputClass} value={api.key} readOnly />
+            <input title="API Key" className={inputClass} value={api.key} readOnly />
             <button type="button" className="shrink-0 px-3 py-2.5 text-xs rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all">
               Rotate
             </button>
