@@ -11,12 +11,12 @@ export declare class AuthController {
     } | {
         message: string;
         user: {
-            id: string;
-            email: string;
             name: string;
-            phone: string | null;
+            email: string;
             role: import(".prisma/client").$Enums.UserRole;
             status: import(".prisma/client").$Enums.UserStatus;
+            phone: string | null;
+            id: string;
             avatar: string | null;
             lastLogin: Date | null;
             joinedAt: Date;
@@ -30,12 +30,12 @@ export declare class AuthController {
     resetPassword(resetPasswordDto: ResetPasswordDto): Promise<{
         message: string;
         user: {
-            id: string;
-            email: string;
             name: string;
-            phone: string | null;
+            email: string;
             role: import(".prisma/client").$Enums.UserRole;
             status: import(".prisma/client").$Enums.UserStatus;
+            phone: string | null;
+            id: string;
             avatar: string | null;
             lastLogin: Date | null;
             joinedAt: Date;
