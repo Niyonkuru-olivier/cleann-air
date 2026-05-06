@@ -46,7 +46,7 @@ function Toggle({ enabled, onChange }: { enabled: boolean; onChange: () => void 
     <button
       type="button"
       role="switch"
-      aria-checked={enabled}
+      aria-checked={enabled ? "true" : "false"}
       onClick={onChange}
       aria-label="Toggle setting"
       className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800 ${enabled ? "bg-blue-500" : "bg-slate-200 dark:bg-slate-600"}`}
