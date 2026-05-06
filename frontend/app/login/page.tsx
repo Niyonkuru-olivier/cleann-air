@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { User, Eye, EyeOff, Wind } from "lucide-react";
@@ -9,8 +9,57 @@ import PageBackground from "../components/PageBackground";
 
 export default function LoginPage() {
   const router = useRouter();
+  const [resetSuccess, setResetSuccess] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("reset") === "success") {
+      setResetSuccess(true);
+    }
+  }, []);
+
+  const [mounted, setMounted] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setIsLoading(true);
+
+    try {
+      const res = await fetch("http://localhost:3001/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Invalid credentials");
+      }
+
+      if (data.requiresReset) {
+        router.push(`/reset-password?email=${encodeURIComponent(data.email)}`);
+      } else {
+        localStorage.setItem("user", JSON.stringify(data.user));
+        router.push("/dashboard");
+      }
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -35,12 +84,25 @@ export default function LoginPage() {
             <p className="text-slate-400 dark:text-white/50 text-xs mt-1">CleanAir Monitoring System</p>
           </div>
 
-          <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); router.push("/dashboard"); }}>
-            {/* Username */}
+          <form className="space-y-4" onSubmit={handleLogin}>
+            {resetSuccess && (
+              <div className="bg-green-500/10 border border-green-500/50 text-green-500 text-xs px-3 py-2 rounded-xl text-center">
+                Password reset successful! Please login with your new password.
+              </div>
+            )}
+            {error && (
+              <div className="bg-red-500/10 border border-red-500/50 text-red-500 text-xs px-3 py-2 rounded-xl text-center">
+                {error}
+              </div>
+            )}
+            {/* Email */}
             <div className="relative">
               <input
-                type="text"
-                placeholder="Username"
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email Address"
                 className="w-full bg-white/60 dark:bg-white/10 border border-slate-200 dark:border-white/20 rounded-xl px-4 py-3 pr-10 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/40 text-sm focus:outline-none focus:border-violet-400 transition-all"
               />
               <User className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-white/40" />
@@ -50,6 +112,9 @@ export default function LoginPage() {
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
                 className="w-full bg-white/60 dark:bg-white/10 border border-slate-200 dark:border-white/20 rounded-xl px-4 py-3 pr-10 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/40 text-sm focus:outline-none focus:border-violet-400 transition-all"
               />
@@ -73,7 +138,7 @@ export default function LoginPage() {
                 />
                 Remember Me
               </label>
-              <Link href="#" className="text-slate-500 dark:text-white/60 hover:text-violet-600 dark:hover:text-white transition-colors">
+              <Link href="/forgot-password" title="Go to forgot password page" className="text-slate-500 dark:text-white/60 hover:text-violet-600 dark:hover:text-white transition-colors">
                 Forgot Password
               </Link>
             </div>
@@ -81,18 +146,19 @@ export default function LoginPage() {
             {/* Submit */}
             <button
               type="submit"
-              className="w-full bg-violet-600 hover:bg-violet-500 dark:bg-white dark:hover:bg-white/90 text-white dark:text-purple-900 font-bold py-3 rounded-xl text-sm transition-all shadow-lg shadow-violet-500/30 dark:shadow-black/20 mt-2"
+              disabled={isLoading}
+              className="w-full bg-violet-600 hover:bg-violet-500 dark:bg-white dark:hover:bg-white/90 text-white dark:text-purple-900 font-bold py-3 rounded-xl text-sm transition-all shadow-lg shadow-violet-500/30 dark:shadow-black/20 mt-2 flex items-center justify-center"
             >
-              Login
+              {isLoading ? "Logging in..." : "Login"}
             </button>
           </form>
 
-          <p className="text-center text-slate-400 dark:text-white/50 text-xs mt-6">
+          {/*<p className="text-center text-slate-400 dark:text-white/50 text-xs mt-6">
             Don&apos;t have an account?{" "}
             <Link href="#" className="text-violet-600 dark:text-white font-semibold hover:text-violet-500 dark:hover:text-violet-300 transition-colors">
               Register
             </Link>
-          </p>
+          </p>*/}
         </div>
       </div>
     </div>

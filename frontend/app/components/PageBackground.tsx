@@ -14,35 +14,18 @@ export default function PageBackground() {
       <div className="fixed inset-0 -z-10 bg-gradient-to-b from-violet-100 via-purple-50 to-indigo-100 dark:from-[#0d0022] dark:via-[#2d0a6e] dark:to-[#6b21a8] transition-colors duration-300" />
 
       {/* Stars — dark mode only */}
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none hidden dark:block">
+      <svg className="fixed inset-0 -z-10 w-full h-full pointer-events-none hidden dark:block" xmlns="http://www.w3.org/2000/svg">
         {STARS.map((s, i) => (
-          <span
+          <circle
             key={i}
-            className={[
-              "absolute rounded-full bg-white",
-              s.big  ? "w-px-2" : "w-px",
-              s.bigH ? "h-px-2" : "h-px",
-            ].join(" ")}
-            data-top={s.top}
-            data-left={s.left}
-            data-opacity={s.opacity}
-            style={
-              {
-                "--star-top":     `${s.top}%`,
-                "--star-left":    `${s.left}%`,
-                "--star-opacity": s.opacity,
-                "--star-w":       s.big  ? "2px" : "1px",
-                "--star-h":       s.bigH ? "2px" : "1px",
-                top:     "var(--star-top)",
-                left:    "var(--star-left)",
-                opacity: "var(--star-opacity)" as unknown as number,
-                width:   "var(--star-w)",
-                height:  "var(--star-h)",
-              } as React.CSSProperties
-            }
+            cx={`${s.left}%`}
+            cy={`${s.top}%`}
+            r={s.big ? 1 : 0.5}
+            fill="white"
+            opacity={s.opacity}
           />
         ))}
-      </div>
+      </svg>
 
       {/* Mountain silhouette */}
       <svg

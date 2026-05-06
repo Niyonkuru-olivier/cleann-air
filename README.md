@@ -1,127 +1,79 @@
-# Clean Air System
+# CleanAir Monitoring System
 
-A real-time CO (Carbon Monoxide) air quality monitoring platform built with Next.js and Tailwind CSS. The system collects sensor readings from IoT devices (ESP32 + MQ-7 sensor), displays live data on a dashboard, and triggers alerts when CO levels exceed safe thresholds.
+A professional Air Quality Monitoring System built with a focus on real-time data visualization, secure user management, and administrative control.
 
----
+## 🚀 Recent Updates & Features
 
-## Tech Stack
+### 🔐 Advanced Authentication & Security
+- **Strict Status-Based Access**: Integrated a status validation system where only `ACTIVE` accounts can access the dashboard.
+  - Suspended or Inactive accounts receive specialized guidance to contact administrators.
+- **Enhanced Login Security**: 
+  - Case-insensitive email handling for better user experience.
+  - Granular error messaging ("Invalid Email" vs "Invalid Password") for faster troubleshooting.
+  - Automated session management with `AuthGuard` route protection.
+- **Secure Password Flow**:
+  - Beautifully designed **Forgot Password** page with a Starry Night theme.
+  - Automated security token generation and email-based password recovery.
+  - Mandatory password reset for new accounts using temporary credentials.
 
-- **Frontend:** Next.js (App Router), Tailwind CSS, TypeScript
-- **Hardware:** ESP32 microcontroller + MQ-7 CO sensor
-- **Database:** Firebase / MySQL
-- **Backend:** REST API
+### 👤 Admin Profile & User Management
+- **Dynamic Profile Settings**: Admins can now update their Full Name, Email, Phone Number, and Password directly from the dashboard.
+- **Real-time Synchronization**: All profile updates are immediately synchronized between the frontend UI and the MySQL database.
+- **Interactive UI**: Added password visibility toggles and real-time validation feedback.
+- **Identity Display**: The logged-in user's email is now dynamically displayed in the sidebar for easy identification.
 
----
+### 📊 Dashboard & Monitoring
+- **Auth-Protected Dashboard**: Complete dashboard suite protected by client-side and server-side authentication checks.
+- **Modern UI/UX**: Premium design aesthetics using glassmorphism, smooth gradients, and micro-animations.
+- **Secure Logout**: Implemented a reliable session expiration and logout workflow.
 
-## Authentication
+## 🛠 Technical Stack
 
-There is **no self-registration** in this system. Only an Admin can create new user accounts.
+- **Frontend**: Next.js 14, React, Tailwind CSS, Lucide Icons.
+- **Backend**: NestJS (Node.js framework).
+- **Database**: MySQL with Prisma ORM.
+- **Security**: Bcrypt.js for hashing, secure token management.
+- **Mailing**: Nodemailer with SMTP integration.
 
-**Account creation flow:**
-1. Admin fills in the new user's name, email address, role, and a temporary password on the **Add User** page.
-2. The system creates the account and **automatically emails the temporary password** to the user's email address.
-3. The user logs in with that temporary password and is prompted to change it on first login.
+## ⚙️ Getting Started
 
----
-
-## User Roles & Functionality
-
-### Admin
-The Admin has full access to the entire platform.
-
-| Feature | Description |
-|---|---|
-| Dashboard overview | View real-time CO readings, metrics, and system-wide statistics |
-| Device management | Add, edit, view, and delete any device in the system |
-| User management | Create new users and send their default password by email; edit or delete any account; assign roles |
-| Alert management | Configure alert rules and view all triggered alerts across all devices |
-| History | Access historical CO readings for any device |
-| Settings | Manage system-wide settings and configurations |
-
----
-
-### Operator
-The Operator can monitor and control all devices but cannot manage users or system settings.
-
-| Feature | Description |
-|---|---|
-| Dashboard overview | View real-time CO readings and metrics for all devices |
-| Device management | View all devices, add new devices, and update device details |
-| Alert management | View and configure alert rules for all devices |
-| History | Access historical CO readings for all devices |
-
----
-
-### Viewer (User)
-The Viewer has read-only access and can only see data for their own assigned device.
-
-| Feature | Description |
-|---|---|
-| Dashboard | View real-time CO readings for their assigned device only |
-| Device view | See the status and details of their own device |
-| Alerts | View alerts triggered by their own device |
-| History | View historical CO readings for their own device |
-
----
-
-## Project Structure
-
-```
-cleanAirSystem/
-├── frontend/
-│   └── app/
-│       ├── page.tsx              # Landing page
-│       ├── login/                # Login page
-│       ├── dashboard/
-│       │   ├── page.tsx          # Dashboard home (metrics, charts)
-│       │   ├── devices/          # Device list, add device, device detail
-│       │   ├── alerts/           # Alerts list and alert rules
-│       │   ├── history/          # Historical readings and charts
-│       │   ├── users/            # User management (Admin only)
-│       │   └── settings/         # System settings (Admin only)
-│       ├── components/           # Shared UI components (Navbar, Footer, Modal)
-│       └── sections/             # Landing page sections
-```
-
----
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js 18+
-- npm / yarn / pnpm
-
-### Installation
-
+### 1. Installation
 ```bash
+# Frontend
 cd frontend
+npm install
+
+# Backend
+cd backend
 npm install
 ```
 
-### Run Development Server
-
+### 2. Database Setup
 ```bash
+cd backend
+npx prisma db push
+```
+
+### 3. Environment Variables
+Create a `.env` file in the `backend` directory with the following:
+```env
+DATABASE_URL="mysql://user:password@localhost:3306/cleanair"
+SMTP_HOST="smtp.gmail.com"
+SMTP_PORT=587
+SMTP_USER="your-email@gmail.com"
+SMTP_PASS="your-app-password"
+MAIL_FROM="your-email@gmail.com"
+FRONTEND_URL="http://localhost:3000"
+```
+
+### 4. Running the Project
+```bash
+# Run Backend (from /backend)
+npm run start:dev
+
+# Run Frontend (from /frontend)
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-### Build for Production
-
-```bash
-npm run build
-npm start
-```
-
 ---
-
-## Features
-
-- Real-time CO level monitoring with live charts
-- Color-coded air quality indicators (safe / warning / danger)
-- Automatic alerts when CO exceeds configured thresholds
-- Historical data view with filterable charts and tables
-- Role-based access control (Admin / Operator / Viewer)
-- Dark mode support
-- Responsive design for desktop and mobile
+Built with ❤️ for the CleanAir Monitoring Project.
