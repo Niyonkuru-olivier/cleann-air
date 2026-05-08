@@ -34,7 +34,16 @@ async function createNestApp(): Promise<express.Express> {
 }
 
 export default async function handler(req: Request, res: Response) {
-  const app = await createNestApp();
-  // Bridge the request to NestJS
-  app(req, res);
+  try {
+    const app = await createNestApp();
+    // Bridge the request to NestJS
+    app(req, res);
+  } catch (err: any) {
+    console.error('NestJS Bridge Error:', err);
+    res.status(500).json({ 
+      statusCode: 500, 
+      message: 'Internal Server Error', 
+      error: err.message 
+    });
+  }
 }
