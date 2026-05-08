@@ -1,9 +1,14 @@
 {
-  "version": 2,
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/backend/src/vercel.ts"
+  "experimentalServices": {
+    "frontend": {
+      "routePrefix": "/",
+      "framework": "nextjs",
+      "root": "."
+    },
+    "backend": {
+      "routePrefix": "/api",
+      "framework": "nestjs",
+      "root": "backend"
     }
-  ]
+  }
 }
