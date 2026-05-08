@@ -8,8 +8,9 @@ export const dynamic = "force-dynamic";
 
 async function fetchUsers() {
   try {
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
-    const res = await fetch(`${API_URL}/api/admin/users`, { cache: "no-store" });
+  try {
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
+    const res = await fetch(`${API_URL}/admin/users`, { cache: "no-store" });
     if (!res.ok) throw new Error("Failed to fetch users");
     return res.json();
   } catch (err) {

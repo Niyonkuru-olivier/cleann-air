@@ -13,8 +13,8 @@ export default function DeleteUserButton({ id }: { id: string }) {
 
     setIsDeleting(true);
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
-      const res = await fetch(`${API_URL}/api/admin/users/${id}`, {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
+      const res = await fetch(`${API_URL}/admin/users/${id}`, {
         method: "DELETE",
       });
 

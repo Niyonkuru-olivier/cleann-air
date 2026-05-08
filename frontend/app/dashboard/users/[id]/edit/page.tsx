@@ -23,8 +23,8 @@ export default function EditUserPage({ params }: { params: Promise<{ id: string 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
-        const res = await fetch(`${API_URL}/api/admin/users/${id}`);
+        const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
+        const res = await fetch(`${API_URL}/admin/users/${id}`);
         if (!res.ok) {
           if (res.status === 404) {
             router.push('/404');
@@ -56,8 +56,8 @@ export default function EditUserPage({ params }: { params: Promise<{ id: string 
     setError("");
     setIsSaving(true);
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
-      const res = await fetch(`${API_URL}/api/admin/users/${id}`, {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
+      const res = await fetch(`${API_URL}/admin/users/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

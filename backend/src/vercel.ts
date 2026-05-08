@@ -8,7 +8,6 @@ const server = express();
 export const createServer = async () => {
   const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
   app.enableCors();
-  app.setGlobalPrefix('api');
   await app.init();
   return server;
 };
