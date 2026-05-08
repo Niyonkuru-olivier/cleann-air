@@ -4,6 +4,8 @@ import { users } from "./data";
 import { RoleBadge, StatusBadge } from "./components/RoleBadge";
 import DarkModeToggle from "../../components/DarkModeToggle";
 
+export const dynamic = "force-dynamic";
+
 const summary = {
   total:     users.length,
   active:    users.filter((u) => u.status === "active").length,

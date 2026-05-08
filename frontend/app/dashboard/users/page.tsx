@@ -4,6 +4,8 @@ import { RoleBadge, StatusBadge } from "./components/RoleBadge";
 import DeleteUserButton from "./components/DeleteUserButton";
 import DarkModeToggle from "../../components/DarkModeToggle";
 
+export const dynamic = "force-dynamic";
+
 async function fetchUsers() {
   try {
     const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
