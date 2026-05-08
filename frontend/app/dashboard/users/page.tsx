@@ -8,129 +8,129 @@ export const dynamic = "force-dynamic";
 
 async function fetchUsers() {
   try {
-  try {
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
-    const res = await fetch(`${API_URL}/admin/users`, { cache: "no-store" });
-    if (!res.ok) throw new Error("Failed to fetch users");
-    return res.json();
-  } catch (err) {
-    console.error(err);
-    return [];
+    try {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
+      const res = await fetch(`${API_URL}/admin/users`, { cache: "no-store" });
+      if (!res.ok) throw new Error("Failed to fetch users");
+      return res.json();
+    } catch (err) {
+      console.error(err);
+      return [];
+    }
   }
-}
 
 const avatarColors = [
-  "bg-blue-500", "bg-purple-500", "bg-green-500",
-  "bg-yellow-500", "bg-red-500", "bg-cyan-500",
-];
+    "bg-blue-500", "bg-purple-500", "bg-green-500",
+    "bg-yellow-500", "bg-red-500", "bg-cyan-500",
+  ];
 
-export default async function UsersPage() {
-  const users = await fetchUsers();
+  export default async function UsersPage() {
+    const users = await fetchUsers();
 
-  const summary = {
-    total:     users.length,
-    active:    users.filter((u: any) => u.status === "ACTIVE").length,
-    inactive:  users.filter((u: any) => u.status === "INACTIVE").length,
-    suspended: users.filter((u: any) => u.status === "SUSPENDED").length,
-  };
+    const summary = {
+      total: users.length,
+      active: users.filter((u: any) => u.status === "ACTIVE").length,
+      inactive: users.filter((u: any) => u.status === "INACTIVE").length,
+      suspended: users.filter((u: any) => u.status === "SUSPENDED").length,
+    };
 
-  return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">User Management</h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-            {summary.total} users · {summary.active} active · {summary.suspended} suspended
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-          <DarkModeToggle />
-          <Link
-            href="/dashboard/users/add"
-            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors"
-          >
-            <Plus className="w-4 h-4" />
-            Add User
-          </Link>
-        </div>
-      </div>
-
-      {/* Summary cards */}
-      <div className="grid grid-cols-4 gap-4">
-        {[
-          { label: "Total Users",  value: summary.total,     color: "text-slate-900 dark:text-white" },
-          { label: "Active",       value: summary.active,    color: "text-green-500" },
-          { label: "Inactive",     value: summary.inactive,  color: "text-slate-400" },
-          { label: "Suspended",    value: summary.suspended, color: "text-red-500" },
-        ].map(({ label, value, color }) => (
-          <div key={label} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 shadow-sm text-center">
-            <p className={`text-3xl font-extrabold ${color}`}>{value}</p>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{label}</p>
+    return (
+      <div className="space-y-8">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">User Management</h1>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+              {summary.total} users · {summary.active} active · {summary.suspended} suspended
+            </p>
           </div>
-        ))}
-      </div>
+          <div className="flex items-center gap-3">
+            <DarkModeToggle />
+            <Link
+              href="/dashboard/users/add"
+              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors"
+            >
+              <Plus className="w-4 h-4" />
+              Add User
+            </Link>
+          </div>
+        </div>
 
-      {/* Users table */}
-      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm overflow-hidden">
-        <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-700 flex items-center gap-2">
-          <Users className="w-4 h-4 text-slate-400" />
-          <h3 className="font-semibold text-slate-900 dark:text-white">All Users</h3>
+        {/* Summary cards */}
+        <div className="grid grid-cols-4 gap-4">
+          {[
+            { label: "Total Users", value: summary.total, color: "text-slate-900 dark:text-white" },
+            { label: "Active", value: summary.active, color: "text-green-500" },
+            { label: "Inactive", value: summary.inactive, color: "text-slate-400" },
+            { label: "Suspended", value: summary.suspended, color: "text-red-500" },
+          ].map(({ label, value, color }) => (
+            <div key={label} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 shadow-sm text-center">
+              <p className={`text-3xl font-extrabold ${color}`}>{value}</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{label}</p>
+            </div>
+          ))}
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="bg-slate-50 dark:bg-slate-700/40">
-                {["User", "Role", "Status", "Devices", "Last Login", "Joined", "Actions"].map((h) => (
-                  <th key={h} className="text-left px-6 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide whitespace-nowrap">
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
-              {users.length === 0 && (
-                <tr>
-                  <td colSpan={7} className="px-6 py-8 text-center text-slate-500">
-                    No users found or backend is unreachable.
-                  </td>
+
+        {/* Users table */}
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm overflow-hidden">
+          <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-700 flex items-center gap-2">
+            <Users className="w-4 h-4 text-slate-400" />
+            <h3 className="font-semibold text-slate-900 dark:text-white">All Users</h3>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-slate-50 dark:bg-slate-700/40">
+                  {["User", "Role", "Status", "Devices", "Last Login", "Joined", "Actions"].map((h) => (
+                    <th key={h} className="text-left px-6 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide whitespace-nowrap">
+                      {h}
+                    </th>
+                  ))}
                 </tr>
-              )}
-              {users.map((user: any, i: number) => (
-                <tr key={user.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/20 transition-colors">
-                  <td className="px-6 py-4">
-                    <Link href={`/dashboard/users/${user.id}`} className="flex items-center gap-3 group">
-                      <div className={`w-9 h-9 rounded-full ${avatarColors[i % avatarColors.length]} flex items-center justify-center text-white text-xs font-bold shrink-0`}>
-                        {user.avatar || user.name.charAt(0)}
-                      </div>
-                      <div>
-                        <p className="font-medium text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">{user.name}</p>
-                        <p className="text-xs text-slate-400">{user.email}</p>
-                      </div>
-                    </Link>
-                  </td>
-                  <td className="px-6 py-4"><RoleBadge role={user.role.toLowerCase()} /></td>
-                  <td className="px-6 py-4"><StatusBadge status={user.status.toLowerCase()} /></td>
-                  <td className="px-6 py-4">
-                    <span className="text-slate-700 dark:text-slate-300 font-medium">{user.assignedDevices ? user.assignedDevices.length : 0}</span>
-                    <span className="text-slate-400 text-xs ml-1">device{(user.assignedDevices ? user.assignedDevices.length : 0) !== 1 ? "s" : ""}</span>
-                  </td>
-                  <td className="px-6 py-4 text-slate-500 dark:text-slate-400">{user.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : 'Never'}</td>
-                  <td className="px-6 py-4 text-slate-500 dark:text-slate-400">{new Date(user.joinedAt).toLocaleDateString()}</td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
-                      <Link href={`/dashboard/users/${user.id}/edit`} className="p-1.5 rounded-lg text-slate-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-all">
-                        <Pencil className="w-4 h-4" />
+              </thead>
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
+                {users.length === 0 && (
+                  <tr>
+                    <td colSpan={7} className="px-6 py-8 text-center text-slate-500">
+                      No users found or backend is unreachable.
+                    </td>
+                  </tr>
+                )}
+                {users.map((user: any, i: number) => (
+                  <tr key={user.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/20 transition-colors">
+                    <td className="px-6 py-4">
+                      <Link href={`/dashboard/users/${user.id}`} className="flex items-center gap-3 group">
+                        <div className={`w-9 h-9 rounded-full ${avatarColors[i % avatarColors.length]} flex items-center justify-center text-white text-xs font-bold shrink-0`}>
+                          {user.avatar || user.name.charAt(0)}
+                        </div>
+                        <div>
+                          <p className="font-medium text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">{user.name}</p>
+                          <p className="text-xs text-slate-400">{user.email}</p>
+                        </div>
                       </Link>
-                      <DeleteUserButton id={user.id} />
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    </td>
+                    <td className="px-6 py-4"><RoleBadge role={user.role.toLowerCase()} /></td>
+                    <td className="px-6 py-4"><StatusBadge status={user.status.toLowerCase()} /></td>
+                    <td className="px-6 py-4">
+                      <span className="text-slate-700 dark:text-slate-300 font-medium">{user.assignedDevices ? user.assignedDevices.length : 0}</span>
+                      <span className="text-slate-400 text-xs ml-1">device{(user.assignedDevices ? user.assignedDevices.length : 0) !== 1 ? "s" : ""}</span>
+                    </td>
+                    <td className="px-6 py-4 text-slate-500 dark:text-slate-400">{user.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : 'Never'}</td>
+                    <td className="px-6 py-4 text-slate-500 dark:text-slate-400">{new Date(user.joinedAt).toLocaleDateString()}</td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2">
+                        <Link href={`/dashboard/users/${user.id}/edit`} className="p-1.5 rounded-lg text-slate-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-all">
+                          <Pencil className="w-4 h-4" />
+                        </Link>
+                        <DeleteUserButton id={user.id} />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
