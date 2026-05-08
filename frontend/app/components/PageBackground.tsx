@@ -1,10 +1,19 @@
-const rand = (seed: number) => { const x = Math.sin(seed + 1) * 10000; return x - Math.floor(x); };
+// Seeded deterministic RNG — same sequence on server and client
+const rand = (seed: number) => {
+  const x = Math.sin(seed + 1) * 10000;
+  return x - Math.floor(x);
+};
+
+// Pre-computed at module level (same on server & client).
+// All floats are rounded to 4 decimal places to prevent
+// cross-platform floating-point precision differences causing
+// React hydration mismatches between Node.js and the browser.
 const STARS = Array.from({ length: 120 }, (_, i) => ({
   big:     rand(i * 4)     < 0.3,
   bigH:    rand(i * 4 + 1) < 0.3,
-  top:     rand(i * 4 + 2) * 60,
-  left:    rand(i * 4 + 3) * 100,
-  opacity: rand(i * 4 + 4) * 0.7 + 0.3,
+  top:     parseFloat((rand(i * 4 + 2) * 60).toFixed(4)),
+  left:    parseFloat((rand(i * 4 + 3) * 100).toFixed(4)),
+  opacity: parseFloat((rand(i * 4 + 4) * 0.7 + 0.3).toFixed(4)),
 }));
 
 export default function PageBackground() {
