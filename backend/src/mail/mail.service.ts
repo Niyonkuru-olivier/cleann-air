@@ -35,7 +35,7 @@ export class MailService {
       await this.transporter.sendMail(mailOptions);
       this.logger.log(`Welcome email sent to ${to}`);
     } catch (error) {
-      this.logger.error(`Failed to send email to ${to}: ${error.message}`);
+      this.logger.error(`Failed to send email to ${to}: ${(error as Error).message}`);
       throw error;
     }
   }
@@ -56,7 +56,7 @@ export class MailService {
       await this.transporter.sendMail(mailOptions);
       this.logger.log(`Reset password email sent to ${to}`);
     } catch (error) {
-      this.logger.error(`Failed to send reset email to ${to}: ${error.message}`);
+      this.logger.error(`Failed to send reset email to ${to}: ${(error as Error).message}`);
       throw error;
     }
   }
