@@ -2,13 +2,18 @@
   "rewrites": [
     {
       "source": "/api/:match*",
-      "destination": "/api/nestjs"
+      "destination": "/api/server"
     }
   ],
-  "functions": {
-    "api/nestjs.ts": {
-      "memory": 1024,
-      "maxDuration": 30
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
     }
-  }
+  ]
 }
