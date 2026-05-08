@@ -6,7 +6,8 @@ import DarkModeToggle from "../../components/DarkModeToggle";
 
 async function fetchUsers() {
   try {
-    const res = await fetch("http://localhost:3001/api/admin/users", { cache: "no-store" });
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+    const res = await fetch(`${API_URL}/api/admin/users`, { cache: "no-store" });
     if (!res.ok) throw new Error("Failed to fetch users");
     return res.json();
   } catch (err) {

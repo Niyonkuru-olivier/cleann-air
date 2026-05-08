@@ -74,7 +74,8 @@ export default function SettingsPage() {
     const userJson = localStorage.getItem("user");
     if (userJson) {
       const user = JSON.parse(userJson);
-      fetch(`http://localhost:3001/api/admin/users/${user.id}`)
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+      fetch(`${API_URL}/api/admin/users/${user.id}`)
         .then((res) => res.json())
         .then((data) => {
           setProfile({
@@ -131,7 +132,8 @@ export default function SettingsPage() {
         body.password = profile.password;
       }
 
-      const res = await fetch(`http://localhost:3001/api/admin/users/${profile.id}`, {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+      const res = await fetch(`${API_URL}/api/admin/users/${profile.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
