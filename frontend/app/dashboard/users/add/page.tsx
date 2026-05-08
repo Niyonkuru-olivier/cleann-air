@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Save } from "lucide-react";
 import DarkModeToggle from "../../../components/DarkModeToggle";
+import { API_BASE } from "../../../../lib/api";
 
 export default function AddUserPage() {
   const [form, setForm] = useState({
@@ -23,8 +24,7 @@ export default function AddUserPage() {
     setIsLoading(true);
 
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
-      const res = await fetch(`${API_URL}/admin/users`, {
+      const res = await fetch(`${API_BASE}/admin/users`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { User, Eye, EyeOff, Wind } from "lucide-react";
+import { API_BASE } from "../../lib/api";
 import DarkModeToggle from "../components/DarkModeToggle";
 import PageBackground from "../components/PageBackground";
 
@@ -36,8 +37,7 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
-      const res = await fetch(`${API_URL}/auth/login`, {
+      const res = await fetch(`${API_BASE}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

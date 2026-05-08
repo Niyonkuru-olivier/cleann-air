@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save } from "lucide-react";
 import DarkModeToggle from "../../../../components/DarkModeToggle";
+import { API_BASE } from "../../../../../lib/api";
 
 export default function EditUserPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -23,8 +24,7 @@ export default function EditUserPage({ params }: { params: Promise<{ id: string 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
-        const res = await fetch(`${API_URL}/admin/users/${id}`);
+        const res = await fetch(`${API_BASE}/admin/users/${id}`);
         if (!res.ok) {
           if (res.status === 404) {
             router.push('/404');
@@ -56,8 +56,7 @@ export default function EditUserPage({ params }: { params: Promise<{ id: string 
     setError("");
     setIsSaving(true);
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
-      const res = await fetch(`${API_URL}/admin/users/${id}`, {
+      const res = await fetch(`${API_BASE}/admin/users/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

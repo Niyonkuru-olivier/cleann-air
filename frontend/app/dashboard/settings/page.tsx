@@ -5,6 +5,7 @@ import {
   Bell, Shield, Wifi, Database, User, Save, Eye, EyeOff,
 } from "lucide-react";
 import DarkModeToggle from "../../components/DarkModeToggle";
+import { API_BASE } from "../../../lib/api";
 
 const inputClass =
   "w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-700 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all";
@@ -74,8 +75,7 @@ export default function SettingsPage() {
     const userJson = localStorage.getItem("user");
     if (userJson) {
       const user = JSON.parse(userJson);
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
-      fetch(`${API_URL}/admin/users/${user.id}`)
+      fetch(`${API_BASE}/admin/users/${user.id}`)
         .then((res) => res.json())
         .then((data) => {
           setProfile({
@@ -132,8 +132,7 @@ export default function SettingsPage() {
         body.password = profile.password;
       }
 
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
-      const res = await fetch(`${API_URL}/admin/users/${profile.id}`, {
+      const res = await fetch(`${API_BASE}/admin/users/${profile.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),

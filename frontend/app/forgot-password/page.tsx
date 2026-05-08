@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Mail, ChevronLeft, Wind, AlertCircle, CheckCircle2 } from "lucide-react";
+import { API_BASE } from "../../lib/api";
 
 const rand = (seed: number) => { const x = Math.sin(seed + 1) * 10000; return x - Math.floor(x); };
 const STARS = Array.from({ length: 120 }, (_, i) => ({
@@ -33,8 +34,7 @@ export default function ForgotPasswordPage() {
     setSuccess("");
 
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
-      const res = await fetch(`${API_URL}/auth/forgot-password`, {
+      const res = await fetch(`${API_BASE}/auth/forgot-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),

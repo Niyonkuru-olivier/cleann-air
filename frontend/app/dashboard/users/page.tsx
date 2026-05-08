@@ -3,13 +3,13 @@ import { Plus, Users, Pencil, Trash2 } from "lucide-react";
 import { RoleBadge, StatusBadge } from "./components/RoleBadge";
 import DeleteUserButton from "./components/DeleteUserButton";
 import DarkModeToggle from "../../components/DarkModeToggle";
+import { API_BASE } from "../../../lib/api";
 
 export const dynamic = "force-dynamic";
 
 async function fetchUsers() {
   try {
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
-    const res = await fetch(`${API_URL}/admin/users`, { cache: "no-store" });
+    const res = await fetch(`${API_BASE}/admin/users`, { cache: "no-store" });
     if (!res.ok) throw new Error("Failed to fetch users");
     return res.json();
   } catch (err) {
