@@ -1,8 +1,3 @@
 {
-  "functions": {
-    "api/nestjs.ts": {
-      "memory": 512,
-      "maxDuration": 30
-    }
-  }
+  "version": 2
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Wind, LayoutDashboard, Menu, X } from "lucide-react";
+import { Wind, LayoutDashboard, LogIn, Menu, X } from "lucide-react";
 import { useState } from "react";
 import DarkModeToggle from "./DarkModeToggle";
 
@@ -50,6 +50,13 @@ export default function Navbar() {
             Live
           </div>
           <Link
+            href="/login"
+            className="flex items-center gap-2 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all hover:bg-slate-100 dark:hover:bg-white/5"
+          >
+            <LogIn className="w-4 h-4" />
+            Login
+          </Link>
+          <Link
             href="/dashboard"
             className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all shadow-lg shadow-blue-500/25"
           >
@@ -83,9 +90,17 @@ export default function Navbar() {
             </a>
           ))}
           <Link
+            href="/login"
+            onClick={() => setMenuOpen(false)}
+            className="flex items-center justify-center gap-2 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all mt-2"
+          >
+            <LogIn className="w-4 h-4" />
+            Login
+          </Link>
+          <Link
             href="/dashboard"
             onClick={() => setMenuOpen(false)}
-            className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all mt-2"
+            className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all mt-1"
           >
             <LayoutDashboard className="w-4 h-4" />
             Dashboard
