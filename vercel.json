@@ -1,3 +1,15 @@
 {
-  "version": 2
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/nestjs"
+    }
+  ],
+  "functions": {
+    "api/nestjs.ts": {
+      "memory": 1024,
+      "maxDuration": 30
+    }
+  }
 }
