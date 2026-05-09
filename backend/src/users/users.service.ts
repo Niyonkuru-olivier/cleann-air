@@ -48,11 +48,13 @@ export class UsersService {
 
       console.log(`[USER CREATED] Email: ${email} | Temporary Password: ${tempPassword}`);
 
-      // Send welcome email asynchronously
-      this.mailService.sendWelcomeEmail(dto.email, dto.name, tempPassword).catch((err) => {
-        // Log but don't fail the request if email fails
-        console.error(`Background email task failed for ${dto.email}:`, err);
-      });
+      // Send welcome email (awaiting to ensure it finishes in serverless)
+      try {
+        await this.mailService.sendWelcomeEmail(dto.email, dto.name, tempPassword);
+      } catch (err) {
+        console.error(`Failed to send welcome email to ${dto.email}:`, err);
+        // We continue because the user was created successfully in the DB
+      }
 
       // Don't return the password hash in the response
       const { passwordHash: _, ...userWithoutPassword } = newUser;
@@ -152,9 +154,11 @@ export class UsersService {
     });
 
     if (changes.length > 0) {
-      this.mailService.sendAccountUpdateNotification(updatedUser.email, updatedUser.name, changes).catch(err => {
+      try {
+        await this.mailService.sendAccountUpdateNotification(updatedUser.email, updatedUser.name, changes);
+      } catch (err) {
         console.error('Failed to send update notification:', err);
-      });
+      }
     }
 
     const { passwordHash, ...userWithoutPassword } = updatedUser;
