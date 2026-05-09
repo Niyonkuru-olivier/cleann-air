@@ -70,7 +70,7 @@ export class MailService {
     const systemName = 'CleanAir System';
 
     const mailOptions = {
-      from: `"${systemName}" <${this.configService.get<string>('MAIL_FROM')}>`,
+      from: `"${systemName}" <${this.configService.get<string>('SMTP_USER')}>`,
       to,
       subject: `Reset Your Password - ${systemName}`,
       text: `Hi ${name},\n\nYou requested to reset your password for ${systemName}.\n\n👉 Click the link below to set a new password:\n${resetUrl}\n\nThis link will expire in 1 hour.\n\nIf you did not request this, please ignore this email.\n\n— The ${systemName} Team`,
