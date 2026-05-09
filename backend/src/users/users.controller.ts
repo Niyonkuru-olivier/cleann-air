@@ -60,6 +60,11 @@ export class UsersController {
     return this.usersService.createUser(createUserDto);
   }
 
+  @Get('stats')
+  async getUserStats() {
+    return this.usersService.getUserStats();
+  }
+
   @Get()
   async findAllUsers() {
     return this.usersService.findAllUsers();

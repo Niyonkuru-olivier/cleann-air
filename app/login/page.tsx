@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { User, Eye, EyeOff, Wind } from "lucide-react";
+import { User, Eye, EyeOff, Wind, ArrowLeft } from "lucide-react";
 import { API_BASE } from "../../lib/api";
 import DarkModeToggle from "../components/DarkModeToggle";
 import PageBackground from "../components/PageBackground";
@@ -53,7 +53,16 @@ export default function LoginPage() {
         router.push(`/reset-password?email=${encodeURIComponent(data.email)}`);
       } else {
         localStorage.setItem("user", JSON.stringify(data.user));
-        router.push("/dashboard");
+        
+        // Redirect based on role
+        const role = data.user.role?.toUpperCase();
+        if (role === "ADMIN") {
+          router.push("/dashboard");
+        } else if (role === "VIEWER") {
+          router.push("/viewer-dashboard");
+        } else {
+          router.push("/operator-dashboard");
+        }
       }
     } catch (err: any) {
       setError(err.message);
@@ -74,7 +83,16 @@ export default function LoginPage() {
 
       {/* Card */}
       <div className="relative z-10 w-full max-w-sm mx-4">
-        <div className="backdrop-blur-xl bg-white/80 dark:bg-white/10 border border-white dark:border-white/20 rounded-3xl p-8 shadow-2xl shadow-purple-200/60 dark:shadow-black/40">
+        <div className="backdrop-blur-xl bg-white/80 dark:bg-white/10 border border-white dark:border-white/20 rounded-3xl p-8 shadow-2xl shadow-purple-200/60 dark:shadow-black/40 relative">
+          
+          {/* Back to Site Button */}
+          <Link 
+            href="/" 
+            className="absolute top-6 left-6 flex items-center gap-1.5 text-slate-500 dark:text-white/40 hover:text-violet-600 dark:hover:text-white transition-all text-[10px] font-bold uppercase tracking-wider group"
+          >
+            <ArrowLeft className="w-3 h-3 group-hover:-translate-x-0.5 transition-transform" />
+            Back to site
+          </Link>
 
           {/* Logo */}
           <div className="flex flex-col items-center mb-8">

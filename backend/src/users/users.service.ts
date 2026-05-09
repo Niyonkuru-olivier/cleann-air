@@ -65,6 +65,20 @@ export class UsersService {
     }
   }
 
+  async getUserStats() {
+    const total = await this.prisma.user.count();
+    const active = await this.prisma.user.count({ where: { status: 'ACTIVE' } });
+    const inactive = await this.prisma.user.count({ where: { status: 'INACTIVE' } });
+    const suspended = await this.prisma.user.count({ where: { status: 'SUSPENDED' } });
+
+    return {
+      total,
+      active,
+      inactive,
+      suspended,
+    };
+  }
+
   async findAllUsers() {
     const users = await this.prisma.user.findMany({
       orderBy: { joinedAt: 'desc' },
@@ -125,10 +139,23 @@ export class UsersService {
       updatedData.isTemporaryPassword = false;
     }
 
+    // Detect changes for notification
+    const changes: string[] = [];
+    if (dto.name && dto.name !== user.name) changes.push(`Name updated to ${dto.name}`);
+    if (dto.email && dto.email.toLowerCase() !== user.email) changes.push(`Email updated to ${dto.email}`);
+    if (dto.role && dto.role !== user.role) changes.push(`Role updated to ${dto.role}`);
+    if (dto.status && dto.status !== user.status) changes.push(`Account status changed to ${dto.status}`);
+
     const updatedUser = await this.prisma.user.update({
-      where: { id },
+      where: { id: id },
       data: updatedData,
     });
+
+    if (changes.length > 0) {
+      this.mailService.sendAccountUpdateNotification(updatedUser.email, updatedUser.name, changes).catch(err => {
+        console.error('Failed to send update notification:', err);
+      });
+    }
 
     const { passwordHash, ...userWithoutPassword } = updatedUser;
     return userWithoutPassword;

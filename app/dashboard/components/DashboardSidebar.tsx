@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Wind,
   LayoutDashboard,
@@ -11,6 +11,7 @@ import {
   Cpu,
   Users,
   ArrowLeft,
+  LogOut,
 } from "lucide-react";
 
 const navItems = [
@@ -24,6 +25,12 @@ const navItems = [
 
 export default function DashboardSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    router.push("/login");
+  };
 
   return (
     <aside className="fixed top-0 left-0 h-full w-64 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 flex flex-col z-40">
@@ -41,7 +48,7 @@ export default function DashboardSidebar() {
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 px-3 py-4 space-y-1">
+      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
         {navItems.map(({ label, href, icon: Icon }) => {
           const active = pathname === href;
           return (
@@ -61,8 +68,18 @@ export default function DashboardSidebar() {
         })}
       </nav>
 
-      {/* Back to site */}
-      <div className="px-3 py-4 border-t border-slate-200 dark:border-slate-700">
+      {/* Footer Buttons */}
+      <div className="px-3 py-4 border-t border-slate-200 dark:border-slate-700 space-y-1">
+        {/* Logout Button */}
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-all group"
+        >
+          <LogOut className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+          Logout
+        </button>
+
+        {/* Back to site */}
         <Link
           href="/"
           className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-white transition-all"

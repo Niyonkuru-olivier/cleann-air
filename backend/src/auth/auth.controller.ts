@@ -17,7 +17,12 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe({ transform: true }))
   async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
-    return this.authService.resetPassword(resetPasswordDto.email, resetPasswordDto.newPassword, resetPasswordDto.token);
+    return this.authService.resetPassword(
+      resetPasswordDto.email, 
+      resetPasswordDto.newPassword, 
+      resetPasswordDto.token, 
+      resetPasswordDto.oldPassword
+    );
   }
 
   @Post('forgot-password')

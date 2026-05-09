@@ -63,7 +63,7 @@ export class AuthService {
     };
   }
 
-  async resetPassword(emailInput: string, newPassword: string, token?: string) {
+  async resetPassword(emailInput: string, newPassword: string, token?: string, oldPassword?: string) {
     const email = emailInput.toLowerCase();
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (!user) {
@@ -75,7 +75,15 @@ export class AuthService {
       if (user.passwordResetToken !== token || !user.passwordResetExpires || user.passwordResetExpires < new Date()) {
         throw new UnauthorizedException('Invalid or expired reset token');
       }
-    } else if (!user.isTemporaryPassword) {
+    } else if (user.isTemporaryPassword) {
+      if (!oldPassword) {
+        throw new BadRequestException('Temporary password is required');
+      }
+      const isMatch = await bcrypt.compare(oldPassword, user.passwordHash);
+      if (!isMatch) {
+        throw new UnauthorizedException('Invalid temporary password');
+      }
+    } else {
       throw new UnauthorizedException('Security token is required to reset password');
     }
 

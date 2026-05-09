@@ -18,6 +18,9 @@ export class ResetPasswordDto {
 
   @IsOptional()
   token?: string;
+
+  @IsOptional()
+  oldPassword?: string;
 }
 
 export class ForgotPasswordDto {

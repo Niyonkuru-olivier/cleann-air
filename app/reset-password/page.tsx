@@ -22,7 +22,9 @@ function ResetPasswordForm() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showTempPassword, setShowTempPassword] = useState(false);
   
+  const [tempPassword, setTempPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   
@@ -40,12 +42,12 @@ function ResetPasswordForm() {
     setError("");
 
     if (newPassword.length < 8) {
-      setError("Password must be at least 8 characters long.");
+      setError("New password must be at least 8 characters long.");
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setError("Passwords do not match.");
+      setError("New passwords do not match.");
       return;
     }
 
@@ -55,7 +57,12 @@ function ResetPasswordForm() {
       const res = await fetch(`${API_BASE}/auth/reset-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, newPassword, token }),
+        body: JSON.stringify({ 
+          email, 
+          newPassword, 
+          token, 
+          oldPassword: tempPassword // Sent as oldPassword for the backend
+        }),
       });
 
       const data = await res.json();
@@ -64,8 +71,12 @@ function ResetPasswordForm() {
         throw new Error(data.message || "Failed to reset password");
       }
 
-      // Redirect to login with a success message
-      router.push("/login?reset=success");
+      // Redirect based on role
+      localStorage.setItem("user", JSON.stringify(data.user));
+      const role = data.user.role?.toUpperCase();
+      if (role === "ADMIN") router.push("/dashboard");
+      else if (role === "VIEWER") router.push("/viewer-dashboard");
+      else router.push("/operator-dashboard");
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -93,6 +104,25 @@ function ResetPasswordForm() {
               {error}
             </div>
           )}
+
+          {/* Temporary Password */}
+          <div className="relative">
+            <input
+              type={showTempPassword ? "text" : "password"}
+              required
+              value={tempPassword}
+              onChange={(e) => setTempPassword(e.target.value)}
+              placeholder="Temporary Password"
+              className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 pr-10 text-white placeholder-white/40 text-sm focus:outline-none focus:border-violet-400 focus:bg-white/15 transition-all"
+            />
+            <button
+              type="button"
+              onClick={() => setShowTempPassword(!showTempPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70 transition-colors"
+            >
+              {showTempPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
+          </div>
 
           {/* New Password */}
           <div className="relative">
