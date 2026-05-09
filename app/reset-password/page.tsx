@@ -20,6 +20,10 @@ function ResetPasswordForm() {
   const email = searchParams?.get("email");
   const token = searchParams?.get("token");
 
+  // If token is present, it's a "Forgot Password" flow (no temp password needed)
+  // If token is absent, it's a "First-time Login" flow (temp password required)
+  const isForgotPasswordFlow = !!token;
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showTempPassword, setShowTempPassword] = useState(false);
@@ -61,7 +65,7 @@ function ResetPasswordForm() {
           email, 
           newPassword, 
           token, 
-          oldPassword: tempPassword // Sent as oldPassword for the backend
+          oldPassword: isForgotPasswordFlow ? undefined : tempPassword 
         }),
       });
 
@@ -71,7 +75,7 @@ function ResetPasswordForm() {
         throw new Error(data.message || "Failed to reset password");
       }
 
-      // Redirect based on role
+      // Automatically log in and redirect based on role
       localStorage.setItem("user", JSON.stringify(data.user));
       const role = data.user.role?.toUpperCase();
       if (role === "ADMIN") router.push("/dashboard");
@@ -92,9 +96,14 @@ function ResetPasswordForm() {
           <div className="bg-gradient-to-br from-violet-500 to-purple-700 p-3 rounded-2xl shadow-lg shadow-purple-500/30 mb-3">
             <Lock className="w-6 h-6 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight text-center">Reset Password</h1>
-          <p className="text-white/70 text-xs mt-2 text-center">
-            For security reasons, please change your temporary password.
+          <h1 className="text-2xl font-bold text-white tracking-tight text-center">
+            {isForgotPasswordFlow ? "Set New Password" : "Reset Password"}
+          </h1>
+          <p className="text-white/70 text-[11px] mt-2 text-center leading-relaxed">
+            {isForgotPasswordFlow 
+              ? "Please enter your new secure password below." 
+              : "For security reasons, please change your temporary password to continue."
+            }
           </p>
         </div>
 
@@ -105,24 +114,26 @@ function ResetPasswordForm() {
             </div>
           )}
 
-          {/* Temporary Password */}
-          <div className="relative">
-            <input
-              type={showTempPassword ? "text" : "password"}
-              required
-              value={tempPassword}
-              onChange={(e) => setTempPassword(e.target.value)}
-              placeholder="Temporary Password"
-              className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 pr-10 text-white placeholder-white/40 text-sm focus:outline-none focus:border-violet-400 focus:bg-white/15 transition-all"
-            />
-            <button
-              type="button"
-              onClick={() => setShowTempPassword(!showTempPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70 transition-colors"
-            >
-              {showTempPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-            </button>
-          </div>
+          {/* Temporary Password - Only shown if it's NOT a forgot password flow */}
+          {!isForgotPasswordFlow && (
+            <div className="relative">
+              <input
+                type={showTempPassword ? "text" : "password"}
+                required
+                value={tempPassword}
+                onChange={(e) => setTempPassword(e.target.value)}
+                placeholder="Temporary Password"
+                className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 pr-10 text-white placeholder-white/40 text-sm focus:outline-none focus:border-violet-400 focus:bg-white/15 transition-all"
+              />
+              <button
+                type="button"
+                onClick={() => setShowTempPassword(!showTempPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70 transition-colors"
+              >
+                {showTempPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
+          )}
 
           {/* New Password */}
           <div className="relative">
@@ -167,7 +178,7 @@ function ResetPasswordForm() {
             disabled={isLoading}
             className="w-full bg-white hover:bg-white/90 disabled:opacity-50 text-purple-900 font-bold py-3 rounded-xl text-sm transition-all shadow-lg shadow-black/20 mt-4 flex items-center justify-center"
           >
-            {isLoading ? "Updating..." : "Reset Password"}
+            {isLoading ? "Updating..." : (isForgotPasswordFlow ? "Save Password" : "Reset Password")}
           </button>
         </form>
       </div>
