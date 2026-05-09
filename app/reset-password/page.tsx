@@ -17,8 +17,8 @@ const STARS = Array.from({ length: 120 }, (_, i) => ({
 function ResetPasswordForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const email = searchParams.get("email");
-  const token = searchParams.get("token");
+  const email = searchParams?.get("email");
+  const token = searchParams?.get("token");
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);

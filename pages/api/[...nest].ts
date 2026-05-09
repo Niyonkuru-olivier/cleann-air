@@ -1,9 +1,9 @@
 import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter } from '@nestjs/platform-express';
-import { AppModule } from '../backend/src/app.module';
+import { AppModule } from '../../backend/src/app.module';
 import express from 'express';
-import type { Request, Response } from 'express';
+import type { NextApiRequest, NextApiResponse } from 'next';
 
 // Singleton for cold-start performance
 let cachedApp: express.Express | null = null;
@@ -33,10 +33,12 @@ async function createNestApp(): Promise<express.Express> {
   return cachedApp;
 }
 
-export default async function handler(req: Request, res: Response) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const app = await createNestApp();
     // Bridge the request to NestJS
+    // Express app is a function that takes (req, res)
+    // @ts-ignore - NextApiRequest/Response are compatible enough with Express
     app(req, res);
   } catch (err: any) {
     console.error('NestJS Bridge Error:', err);
@@ -47,3 +49,10 @@ export default async function handler(req: Request, res: Response) {
     });
   }
 }
+
+// Disable Next.js body parsing so NestJS can handle it (important for file uploads, etc.)
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
